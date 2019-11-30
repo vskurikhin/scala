@@ -34,6 +34,7 @@ class Person(private val _id: UUID = UUID.randomUUID()) {
   override def equals(other: Any): Boolean = other match {
     case that: Person =>
       (that canEqual this) &&
+        id == that.id &&
         firstName == that.firstName &&
         surName == that.surName &&
         secondName == that.secondName &&
@@ -44,7 +45,7 @@ class Person(private val _id: UUID = UUID.randomUUID()) {
   }
 
   override def hashCode(): Int = {
-    val state = Seq(firstName, secondName, surName, sex, birthDate, address)
+    val state = Seq(id, firstName, secondName, surName, sex, birthDate, address)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 
