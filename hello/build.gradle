@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'scala'
+    id 'application'
+}
+
+group 'su.svn.scala'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+mainClassName = 'su.svn.scala.Main'
+
+configurations {
+    fatJar
+    scalaCompiler
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    scalaCompiler group: 'org.scala-lang', name: 'scala-compiler', version: '2.11.12'
+    compile group: 'org.scala-lang', name: 'scala-library', version: '2.11.12'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Scala FatJar',
+                'Implementation-Version': getArchiveVersion(),
+                'Main-Class': mainClassName,
+                'Implementation-Vendor': 'vskurikhin'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+tasks.withType(ScalaCompile) {
+    scalaClasspath = configurations.scalaCompiler
+}
