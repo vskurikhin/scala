@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'su.svn.scala'
-version '2.0'
+version '3.0'
 
 sourceCompatibility = 1.8
 
@@ -20,12 +20,16 @@ repositories {
     mavenCentral()
 }
 
+def org_junit_version = '4.12'
+def scale_compiler = '2.13.1'
+def scale_compiler_major = '2.13'
+
 dependencies {
-    scalaCompiler group: 'org.scala-lang', name: 'scala-compiler', version: '2.11.12'
-    compile group: 'org.scala-lang', name: 'scala-library', version: '2.11.12'
-    compile group: 'org.scala-lang.modules', name: 'scala-xml_2.11', version: '1.2.0'
-    testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: '3.0.8'
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    scalaCompiler group: 'org.scala-lang', name: 'scala-compiler', version: scale_compiler
+    compile group: 'org.scala-lang', name: 'scala-library', version: scale_compiler
+    compile group: 'org.scala-lang.modules', name: 'scala-xml_' + scale_compiler_major, version: '1.2.0'
+    testCompile group: 'org.scalatest', name: 'scalatest_' + scale_compiler_major, version: '3.0.8'
+    testImplementation group: 'junit', name: 'junit', version: org_junit_version
     testRuntime 'org.pegdown:pegdown:1.4.2'
 }
 
