@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'scala'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version "5.0.0"
+}
+
+group 'su.svn.scala'
+version '3.0'
+
+sourceCompatibility = 1.8
+
+mainClassName = 'su.svn.scala.akka.Main'
+
+configurations {
+    fatJar
+    scalaCompiler
+}
+
+repositories {
+    mavenCentral()
+}
+
+def org_junit_version = '4.12'
+def scala_compiler = '2.13.1'
+def scala_compiler_major = '2.13'
+def com_typesafe_akka = '2.6.1'
+
+dependencies {
+    scalaCompiler group: 'org.scala-lang', name: 'scala-compiler', version: scala_compiler
+    compile group: 'org.scala-lang', name: 'scala-library', version: scala_compiler
+    compile group: 'org.scala-lang.modules', name: 'scala-xml_' + scala_compiler_major, version: '1.2.0'
+    compile group: 'com.typesafe.akka', name: 'akka-actor-typed_' + scala_compiler_major, version: com_typesafe_akka
+    compile group: 'com.typesafe.akka', name: 'akka-cluster-sharding_' + scala_compiler_major, version: com_typesafe_akka
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    testImplementation group: 'com.typesafe.akka', name: 'akka-actor-testkit-typed_' + scala_compiler_major, version: com_typesafe_akka
+    testImplementation group: 'org.scalatest', name: 'scalatest_' + scala_compiler_major, version: '3.0.8'
+    testImplementation group: 'junit', name: 'junit', version: org_junit_version
+    testRuntime 'org.pegdown:pegdown:1.4.2'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes "Main-Class": "su.svn.scala.akka.AkkaQuickstart"
+    }
+}
+
+shadowJar {
+    mergeServiceFiles('reference.conf')
+}
+
+tasks.withType(ScalaCompile) {
+    scalaClasspath = configurations.scalaCompiler
+}
